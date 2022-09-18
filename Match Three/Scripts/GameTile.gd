@@ -22,4 +22,4 @@ func _on_Area2d_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.pressed:
 			print("Left button was clicked at ", event.position)
-			get_tree().call_group("TileGrid", "click_event", row, column)
+			get_tree().call_group("TileGrid", "click_event", row, column, self)
