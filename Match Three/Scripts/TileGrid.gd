@@ -10,10 +10,12 @@ var tiles_clicked = {"first": null, "second": null}
 
 var game_tile = preload("res://Scenes/GameTile.tscn")
 var tiles = []
+var score
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print("in ready")
+	score = 0
 	click_number = 1
 	make_empty_board()
 	generate_board()
@@ -33,7 +35,6 @@ func generate_board():
 	for column_index in board_size:
 		for row_index in board_size:
 			if(tiles[column_index][row_index] == null):
-				print("generating tile for column: " + str(column_index) + " row: " + str(row_index))
 				randomize()
 				var tile_instance = game_tile.instance()
 				tile_instance.colour = colours[randi() % colours.size()]
@@ -140,6 +141,8 @@ func do_colours_match(colour, tile_1, tile_2):
 
 func remove_matched_tiles(tiles_to_remove):
 	for tile in tiles_to_remove:
+		score = score + 10
+		print(score)
 		tiles[tile.column][tile.row] = null
 		tile.queue_free()
 	generate_board()
