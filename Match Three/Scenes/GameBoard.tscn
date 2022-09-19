@@ -1,62 +1,72 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scenes/GameTile.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Textures/Premium_Insects/Singles/66_Scorpion_Special.png" type="Texture" id=2]
+[ext_resource path="res://Textures/Premium_Insects/Singles/47_Butterfly_Pink.png" type="Texture" id=2]
 [ext_resource path="res://Textures/Premium_Insects/Singles/40_Dragonfly_Special.png" type="Texture" id=3]
 [ext_resource path="res://Scripts/TileGrid.gd" type="Script" id=4]
-[ext_resource path="res://Textures/Premium_Insects/Singles/12_Snail_Special.png" type="Texture" id=5]
+[ext_resource path="res://Textures/Premium_Insects/Singles/22_Bee_Drone.png" type="Texture" id=5]
 [ext_resource path="res://Textures/Premium_Insects/Singles/62_Scorpion_Blue.png" type="Texture" id=9]
 
 [node name="GameBoard" type="Node2D"]
 
 [node name="TileGrid" type="Node2D" parent="." groups=["TileGrid"]]
+scale = Vector2( 2, 2 )
 script = ExtResource( 4 )
 
 [node name="Sprite" parent="TileGrid" instance=ExtResource( 1 )]
 position = Vector2( 16, 16 )
 texture = ExtResource( 3 )
+colour = "green"
 
 [node name="RigidBody2D" parent="TileGrid" instance=ExtResource( 1 )]
-position = Vector2( 47, 16 )
+position = Vector2( 48, 16 )
 texture = ExtResource( 2 )
+colour = "pink"
 column = 1
 
 [node name="GameTile" parent="TileGrid" instance=ExtResource( 1 )]
-position = Vector2( 77, 46 )
+position = Vector2( 80, 48 )
 texture = ExtResource( 5 )
+colour = "orange"
 row = 1
 column = 2
 
 [node name="GameTile5" parent="TileGrid" instance=ExtResource( 1 )]
-position = Vector2( 77, 16 )
+position = Vector2( 80, 16 )
 texture = ExtResource( 3 )
+colour = "green"
 column = 2
 
 [node name="GameTile2" parent="TileGrid" instance=ExtResource( 1 )]
-position = Vector2( 16, 46 )
+position = Vector2( 16, 48 )
 texture = ExtResource( 5 )
+colour = "orange"
 row = 1
 
 [node name="GameTile3" parent="TileGrid" instance=ExtResource( 1 )]
-position = Vector2( 47, 76 )
+position = Vector2( 48, 80 )
 texture = ExtResource( 5 )
+colour = "orange"
 row = 2
 column = 1
 
 [node name="GameTile4" parent="TileGrid" instance=ExtResource( 1 )]
-position = Vector2( 16, 76 )
+position = Vector2( 16, 80 )
 texture = ExtResource( 9 )
+colour = "teal"
 row = 2
 
 [node name="GameTile6" parent="TileGrid" instance=ExtResource( 1 )]
-position = Vector2( 47, 46 )
+position = Vector2( 48, 48 )
 texture = ExtResource( 9 )
+colour = "teal"
 row = 1
 column = 1
 
 [node name="GameTile7" parent="TileGrid" instance=ExtResource( 1 )]
-position = Vector2( 77, 76 )
+position = Vector2( 80, 80 )
 texture = ExtResource( 9 )
+colour = "teal"
 row = 2
 column = 2
 

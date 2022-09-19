@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/22_Bee_Drone.png-a137ba6865bbd3317e5cc43555088018.stex"
+path="res://.import/orange.png-a215189d15ea3e3e13f354c119bfaeaa.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/Premium_Insects/Singles/22_Bee_Drone.png"
-dest_files=[ "res://.import/22_Bee_Drone.png-a137ba6865bbd3317e5cc43555088018.stex" ]
+source_file="res://Textures/Backgrounds/orange.png"
+dest_files=[ "res://.import/orange.png-a215189d15ea3e3e13f354c119bfaeaa.stex" ]
 
 [params]
 

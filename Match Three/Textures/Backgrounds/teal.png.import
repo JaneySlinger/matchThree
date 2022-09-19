@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/22_Bee_Drone.png-a137ba6865bbd3317e5cc43555088018.stex"
+path="res://.import/teal.png-b8a57fba25ccb989c36be965203da9be.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/Premium_Insects/Singles/22_Bee_Drone.png"
-dest_files=[ "res://.import/22_Bee_Drone.png-a137ba6865bbd3317e5cc43555088018.stex" ]
+source_file="res://Textures/Backgrounds/teal.png"
+dest_files=[ "res://.import/teal.png-b8a57fba25ccb989c36be965203da9be.stex" ]
 
 [params]
 
