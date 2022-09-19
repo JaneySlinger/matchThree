@@ -9,29 +9,39 @@ var columns_clicked = {"first": null, "second": null}
 var tiles_clicked = {"first": null, "second": null}
 
 var game_tile = preload("res://Scenes/GameTile.tscn")
+var tiles = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print("in ready")
 	click_number = 1
+	make_empty_board()
 	generate_board()
-	arrange_tiles()
 	
 func set_board_size(new_board_size):
 	print("in set_board_size")
 	board_size = new_board_size
-	
+
+func make_empty_board():
+	for column in board_size:
+		tiles.append([])
+		for row in board_size:
+			tiles[column].append(null) # Set a starter value for each position
+
 func generate_board():
 	var colours = ["pink", "green", "teal", "orange"]
 	for column_index in board_size:
 		for row_index in board_size:
-			randomize()
-			var tile_instance = game_tile.instance()
-			tile_instance.colour = colours[randi() % colours.size()]
-			tile_instance.row = row_index
-			tile_instance.column = column_index
-			add_child(tile_instance)
-		
+			if(tiles[column_index][row_index] == null):
+				print("generating tile for column: " + str(column_index) + " row: " + str(row_index))
+				randomize()
+				var tile_instance = game_tile.instance()
+				tile_instance.colour = colours[randi() % colours.size()]
+				tile_instance.row = row_index
+				tile_instance.column = column_index
+				tiles[column_index][row_index] = tile_instance
+				add_child(tile_instance)
+	arrange_tiles()
 
 func click_event(row, column, tile_ref):
 	match click_number:
@@ -69,18 +79,12 @@ func swap_tiles():
 	tiles_clicked = {"first": null, "second": null}
 	temp_tile_info = null
 	
-
 func arrange_tiles():
 	print("arranging tiles")
 	for child in get_children():
 		var row_position = 32 * child.row + 16
 		var column_position = 32 * child.column + 16
-		#print(child)
-		#print(row_position)
-		#print(column_position)
 		child.position = Vector2(column_position, row_position)
-		#print(child.position)
-	
 
 func is_match(tile):
 	var colour_to_match = tile.colour
@@ -134,6 +138,8 @@ func do_colours_match(colour, tile_1, tile_2):
 		if(tile_1.colour == colour and tile_2.colour == colour):
 			return true
 
-func remove_matched_tiles(tiles):
-	for tile in tiles:
+func remove_matched_tiles(tiles_to_remove):
+	for tile in tiles_to_remove:
+		tiles[tile.column][tile.row] = null
 		tile.queue_free()
+	generate_board()
