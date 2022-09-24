@@ -4,24 +4,19 @@ extends Node2D
 export(int) var board_size setget set_board_size
 
 var click_number
-var rows_clicked = {"first": null, "second": null}
-var columns_clicked = {"first": null, "second": null}
 var tiles_clicked = {"first": null, "second": null}
 
 var game_tile = preload("res://Scenes/GameTile.tscn")
 var tiles = []
 var score
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
-	print("in ready")
 	score = 0
 	click_number = 1
 	make_empty_board()
 	generate_board()
 	
 func set_board_size(new_board_size):
-	print("in set_board_size")
 	board_size = new_board_size
 
 func make_empty_board():
@@ -42,25 +37,20 @@ func generate_board():
 				tile_instance.column = column_index
 				tiles[column_index][row_index] = tile_instance
 				add_child(tile_instance)
-	#arrange_tiles()
 
 func click_event(row, column, tile_ref):
 	match click_number:
 		1:
-			rows_clicked["first"] = row
-			columns_clicked["first"] = column
 			tiles_clicked["first"] = tile_ref
 			click_number = 2
 		2:
-			rows_clicked["second"] = row
-			columns_clicked["second"] = column
 			tiles_clicked["second"] = tile_ref
 			if(are_tiles_perpendicular()):
 				swap_tiles()
 			click_number = 1
 
 func are_tiles_perpendicular():
-	return rows_clicked["first"] == rows_clicked["second"] or columns_clicked["first"] == columns_clicked["second"]
+	return tiles_clicked["first"].row == tiles_clicked["second"].row or tiles_clicked["first"].column == tiles_clicked["second"].column
 
 func swap_tiles():
 	print("swapping tiles")
@@ -72,13 +62,9 @@ func swap_tiles():
 	tiles_clicked["second"].row = temp_tile_info["row"]
 	tiles_clicked["second"].column = temp_tile_info["column"]
 	
-	
-	#arrange_tiles()
 	is_match(tiles_clicked["first"])
 	is_match(tiles_clicked["second"])
-	
-	rows_clicked = {"first": null, "second": null}
-	columns_clicked = {"first": null, "second": null}
+
 	tiles_clicked = {"first": null, "second": null}
 	temp_tile_info = null
 
@@ -92,36 +78,22 @@ func call_swap_tiles_animation():
 	var row_difference = tiles_clicked["first"].row - tiles_clicked["second"].row
 	var column_difference = tiles_clicked["first"].column - tiles_clicked["second"].column
 	
-	print("tile 1 column: " + str(tiles_clicked["first"].column), " tile 2 column: " + str(tiles_clicked["second"].column))
-	print("column difference is: " + str(column_difference))
-	
 	match column_difference:
 		1: 
-			print("first tile going left")
 			tiles_clicked["first"].animate_swap("Slide_left")
 			tiles_clicked["second"].animate_swap("Slide_right")
 		-1: 
-			print("first tile going right")
 			tiles_clicked["first"].animate_swap("Slide_right")
 			tiles_clicked["second"].animate_swap("Slide_left")
 	
 	match row_difference:
 		1:
-			print("first tile going up")
 			tiles_clicked["first"].animate_swap("Slide_up")
 			tiles_clicked["second"].animate_swap("Slide_down")
 		-1:
-			print("first tile going down")
 			tiles_clicked["first"].animate_swap("Slide_down")
 			tiles_clicked["second"].animate_swap("Slide_up")
-	
 			
-func arrange_tiles():
-	print("arranging tiles")
-	for child in get_children():
-		var row_position = 32 * child.row + 16
-		var column_position = 32 * child.column + 16
-		child.position = Vector2(column_position, row_position)
 
 func is_match(tile):
 	var colour_to_match = tile.colour

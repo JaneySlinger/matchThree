@@ -8,13 +8,14 @@ onready var animationPlayer = get_node("AnimationPlayer")
 
 var sprite_texture
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
+	arrange_tile()
+	$AnimationPlayer.play("Appear")
+
+func arrange_tile():
 	var row_position = 32 * row + 16
 	var column_position = 32 * column + 16
 	position = Vector2(column_position, row_position)
-	
-	$AnimationPlayer.play("Appear")
 
 func setTexture(newTexture):
 	$Sprite.texture = newTexture
@@ -43,13 +44,9 @@ func setColumn(newColumn):
 func _on_Area2d_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.pressed:
-			print("Left button was clicked at ", event.position)
-			print("tile clicked is row: " + str(row) + " column: " + str(column))
 			get_tree().call_group("TileGrid", "click_event", row, column, self)
 
 func animate_swap(animation):
 	$AnimationPlayer.stop()
 	$AnimationPlayer.play(animation)
-	var row_position = 32 * row + 16
-	var column_position = 32 * column + 16
-	position = Vector2(column_position, row_position)
+	arrange_tile()
