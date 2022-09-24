@@ -42,7 +42,7 @@ func generate_board():
 				tile_instance.column = column_index
 				tiles[column_index][row_index] = tile_instance
 				add_child(tile_instance)
-	arrange_tiles()
+	#arrange_tiles()
 
 func click_event(row, column, tile_ref):
 	match click_number:
@@ -65,13 +65,15 @@ func are_tiles_perpendicular():
 func swap_tiles():
 	print("swapping tiles")
 	var temp_tile_info = {"row": tiles_clicked["first"].row, "column": tiles_clicked["first"].column}
+	call_swap_tiles_animation()
 	tiles_clicked["first"].row = tiles_clicked["second"].row
 	tiles_clicked["first"].column = tiles_clicked["second"].column
 	
 	tiles_clicked["second"].row = temp_tile_info["row"]
 	tiles_clicked["second"].column = temp_tile_info["column"]
 	
-	arrange_tiles()
+	
+	#arrange_tiles()
 	is_match(tiles_clicked["first"])
 	is_match(tiles_clicked["second"])
 	
@@ -79,7 +81,41 @@ func swap_tiles():
 	columns_clicked = {"first": null, "second": null}
 	tiles_clicked = {"first": null, "second": null}
 	temp_tile_info = null
+
+func call_swap_tiles_animation():
+	#first tile moving right, second tile left is column difference -1
+	#first tile moving left, second moving right is column difference 1
 	
+	#first tile moving down, second up = row -1
+	#first tile moving up, second down = row +1
+	
+	var row_difference = tiles_clicked["first"].row - tiles_clicked["second"].row
+	var column_difference = tiles_clicked["first"].column - tiles_clicked["second"].column
+	
+	print("tile 1 column: " + str(tiles_clicked["first"].column), " tile 2 column: " + str(tiles_clicked["second"].column))
+	print("column difference is: " + str(column_difference))
+	
+	match column_difference:
+		1: 
+			print("first tile going left")
+			tiles_clicked["first"].animate_swap("Slide_left")
+			tiles_clicked["second"].animate_swap("Slide_right")
+		-1: 
+			print("first tile going right")
+			tiles_clicked["first"].animate_swap("Slide_right")
+			tiles_clicked["second"].animate_swap("Slide_left")
+	
+	match row_difference:
+		1:
+			print("first tile going up")
+			tiles_clicked["first"].animate_swap("Slide_up")
+			tiles_clicked["second"].animate_swap("Slide_down")
+		-1:
+			print("first tile going down")
+			tiles_clicked["first"].animate_swap("Slide_down")
+			tiles_clicked["second"].animate_swap("Slide_up")
+	
+			
 func arrange_tiles():
 	print("arranging tiles")
 	for child in get_children():

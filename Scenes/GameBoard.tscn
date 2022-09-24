@@ -7,7 +7,7 @@
 [node name="TileGrid" type="Node2D" parent="." groups=["TileGrid"]]
 scale = Vector2( 2, 2 )
 script = ExtResource( 4 )
-board_size = 5
+board_size = 3
 
 [connection signal="input_event" from="TileGrid/GameTile" to="TileGrid/GameTile" method="_on_Area2d_input_event"]
 [connection signal="input_event" from="TileGrid/GameTile2" to="TileGrid/GameTile2" method="_on_Area2d_input_event"]
