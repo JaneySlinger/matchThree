@@ -30,13 +30,19 @@ func generate_board():
 	for column_index in board_size:
 		for row_index in board_size:
 			if(tiles[column_index][row_index] == null):
-				randomize()
-				var tile_instance = game_tile.instance()
-				tile_instance.colour = colours[randi() % colours.size()]
-				tile_instance.row = row_index
-				tile_instance.column = column_index
-				tiles[column_index][row_index] = tile_instance
-				add_child(tile_instance)
+				var looping = true
+				while ( looping ):
+					randomize()
+					var tile_instance = game_tile.instance()
+					tile_instance.colour = colours[randi() % colours.size()]
+					tile_instance.row = row_index
+					tile_instance.column = column_index
+					tiles[column_index][row_index] = tile_instance
+					if is_match(tile_instance) == null:
+						add_child(tile_instance)
+						looping = false
+					else:
+						tiles[column_index][row_index] = null
 
 func click_event(row, column, tile_ref):
 	match click_number:
@@ -53,17 +59,20 @@ func are_tiles_perpendicular():
 	return tiles_clicked["first"].row == tiles_clicked["second"].row or tiles_clicked["first"].column == tiles_clicked["second"].column
 
 func swap_tiles():
-	print("swapping tiles")
 	var temp_tile_info = {"row": tiles_clicked["first"].row, "column": tiles_clicked["first"].column}
 	call_swap_tiles_animation()
 	tiles_clicked["first"].row = tiles_clicked["second"].row
 	tiles_clicked["first"].column = tiles_clicked["second"].column
+	tiles[tiles_clicked["first"].column][tiles_clicked["first"].row] = tiles_clicked["first"]
 	
 	tiles_clicked["second"].row = temp_tile_info["row"]
 	tiles_clicked["second"].column = temp_tile_info["column"]
+	tiles[tiles_clicked["second"].column][tiles_clicked["second"].row] = tiles_clicked["second"]
 	
-	is_match(tiles_clicked["first"])
-	is_match(tiles_clicked["second"])
+	var tiles_to_remove = is_match(tiles_clicked["first"])
+	remove_matched_tiles(tiles_to_remove)
+	tiles_to_remove = is_match(tiles_clicked["second"])
+	remove_matched_tiles(tiles_to_remove)
 
 	tiles_clicked = {"first": null, "second": null}
 	temp_tile_info = null
@@ -102,45 +111,39 @@ func is_match(tile):
 	var tile_to_right = get_tile_at_position(tile.row, tile.column + 1)
 	if(do_colours_match(colour_to_match, tile_to_left, tile_to_right)):
 		print("matched on both sides horizontally")
-		remove_matched_tiles([tile, tile_to_left, tile_to_right])
-		return true
+		return [tile, tile_to_left, tile_to_right]
 
 	var tile_two_to_the_right = get_tile_at_position(tile.row, tile.column + 2)
 	if(do_colours_match(colour_to_match, tile_to_right, tile_two_to_the_right)):
 		print("matched two to the right")
-		remove_matched_tiles([tile, tile_to_right, tile_two_to_the_right])
-		return true
+		return [tile, tile_to_right, tile_two_to_the_right]
 		
 	#check two to the left
 	var tile_two_to_the_left = get_tile_at_position(tile.row, tile.column - 2)
 	if(do_colours_match(colour_to_match, tile_to_left, tile_two_to_the_left)):
 		print("matched two to the left")
-		remove_matched_tiles([tile, tile_to_left, tile_two_to_the_left])
-		return true
+		return [tile, tile_to_left, tile_two_to_the_left]
 		
 	var tile_to_top = get_tile_at_position(tile.row - 1, tile.column)
 	var tile_to_bottom = get_tile_at_position(tile.row + 1, tile.column)
 	if(do_colours_match(colour_to_match, tile_to_top, tile_to_bottom)):
 		print("matched both sides vertically")
-		remove_matched_tiles([tile, tile_to_top, tile_to_bottom])
-		return true
+		return [tile, tile_to_top, tile_to_bottom]
+		
 	#check two to the top
 	var tile_two_to_top = get_tile_at_position(tile.row - 2, tile.column)
 	if(do_colours_match(colour_to_match, tile_to_top, tile_two_to_top)):
 		print("matched two to the top")
-		remove_matched_tiles([tile, tile_to_top, tile_two_to_top])
-		return true
+		return [tile, tile_to_top, tile_two_to_top]
 		
 	var tile_two_to_bottom = get_tile_at_position(tile.row + 2, tile.column)
 	if(do_colours_match(colour_to_match, tile_to_bottom, tile_two_to_bottom)):
 		print("matched two to the bottom")
-		remove_matched_tiles([tile, tile_to_bottom, tile_two_to_bottom])
-		return true
+		return [tile, tile_to_bottom, tile_two_to_bottom]
 
 func get_tile_at_position(row, column):
-	for child in get_children():
-		if child.row == row and child.column == column:
-			return child
+	if row in range(0,5) and column in range (0,5):
+		return tiles[column][row]
 
 func do_colours_match(colour, tile_1, tile_2):
 	if(tile_1 != null and tile_2 != null):
@@ -148,9 +151,10 @@ func do_colours_match(colour, tile_1, tile_2):
 			return true
 
 func remove_matched_tiles(tiles_to_remove):
-	for tile in tiles_to_remove:
-		score = score + 10
-		print(score)
-		tiles[tile.column][tile.row] = null
-		tile.queue_free()
-	generate_board()
+	if tiles_to_remove != null:
+		for tile in tiles_to_remove:
+			score = score + 10
+			print(score)
+			tiles[tile.column][tile.row] = null
+			tile.queue_free()
+		generate_board()
